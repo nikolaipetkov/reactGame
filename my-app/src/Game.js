@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import * as ReactBootstrap from 'react-bootstrap';
+//import * as ReactBootstrap from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
+import { Modal } from 'react-bootstrap';
 import './App.css';
 
 function Square(props) {
@@ -234,33 +236,32 @@ class Trigger extends React.Component {
   render() {
     return (
       <div className="modal-container" style={{ height: 500 }}>
-        <ReactBootstrap.Button
+        <Button
           bsStyle="primary"
           bsSize="large"
-          onClick={() => this.props.showModal()/*this.setState({ show: true })*/}
+          onClick={() => this.props.showModal()}
         >
           Launch contained modal
-        </ReactBootstrap.Button>
-
-        <ReactBootstrap.Modal
+        </Button>
+        <Modal
           show={this.props.show}
           onHide={this.handleHide}
           container={this}
           aria-labelledby="contained-modal-title"
         >
-          <ReactBootstrap.Modal.Header closeButton>
-            <ReactBootstrap.Modal.Title id="contained-modal-title">
+          <Modal.Header closeButton>
+            <Modal.Title id="contained-modal-title">
               Player Points: {this.props.points}
-            </ReactBootstrap.Modal.Title>
-          </ReactBootstrap.Modal.Header>
-          <ReactBootstrap.Modal.Body>
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
             body text
-          </ReactBootstrap.Modal.Body>
-          <ReactBootstrap.Modal.Footer>
-            <ReactBootstrap.Button onClick={this.playAgain}>Play Again</ReactBootstrap.Button>
-            <ReactBootstrap.Button onClick={this.handleHide}>Close</ReactBootstrap.Button>
-          </ReactBootstrap.Modal.Footer>
-        </ReactBootstrap.Modal>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button onClick={this.playAgain}>Play Again</Button>
+            <Button onClick={this.handleHide}>Close</Button>
+          </Modal.Footer>
+        </Modal>
       </div>
     );
   }
