@@ -52,3 +52,10 @@ ol, ul {
 .game-info {
   margin-left: 20px;
 }
+
+/*.modal-container {
+  position: relative;
+}
+.modal-container .modal, .modal-container .modal-backdrop {
+  position: absolute;
+}*/

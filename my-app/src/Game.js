@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import * as ReactBootstrap from 'react-bootstrap';
 import './App.css';
 
 function Square(props) {
@@ -19,6 +20,7 @@ class Timer extends React.Component {
   }
   
   componentDidMount(prevProps){
+    console.log('time is mounted')
     this.timerID = setInterval(
       () => this.tick(),
       1000
@@ -28,58 +30,49 @@ class Timer extends React.Component {
   }
    
   componentDidUpdate(){
-    if(this.state.remainingTime == 0){
+    if(this.props.remainingTime == 0){
+      console.log('end from inside')
       clearInterval(this.timerID);
       //this.setState({remainingTime: 0})
+      //this.props.onTimerChange();
     }
   }
   
   componentWillUnmount() {
+    console.log('timer is unmounted')
     clearInterval(this.timerID);
   }
   
   tick() {
-    this.setState({
+    /*this.setState({
       remainingTime: this.state.remainingTime - 1
-    });
+    });*/
+    this.props.onTimerChange();
   }
   
   render(){
     return (
       <div className="timer">
-        {this.state.remainingTime}
+        {this.props.remainingTime}
       </div>
     );
   }
 }
+
   
 class Board extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      squares: [],
-      words: ['angel', 'gel', 'age', 'leg', 'lag', 'gal'],
-      points: 0,
-    };
   }
 
   handleClick(i) {
-    const squares = this.state.squares.slice();
-    squares.push(i)
-    this.setState({squares: squares});
+    this.props.handleClick(i)
   }
+
+  
   
   componentDidUpdate(prevProps) {
-    console.log(this.state.squares.join(''))
-    console.log(this.state.words)
-    const index = this.state.words.indexOf(this.state.squares.join(''));
-    if(index > -1){
-      console.log('you win2')
-      const remainingWords = [...this.state.words.slice(0, index), ...this.state.words.slice(index+1)]
-      //remainingWords.splice(index, 1)
-      this.setState({squares: [], points: this.state.points + 1, words: remainingWords})
-    }
-      
+   this.props.checkIfWordIsCorrect();
   }
 
   renderSquare(i) {
@@ -94,8 +87,9 @@ class Board extends React.Component {
   render() {
     return (
       <div>
-        <div className="points">Points: {this.state.points}</div>
-        <div className="current-word"> {this.state.squares} </div>
+        <div className="points">Test: {this.props.value}</div>
+        <div className="points">Points: {this.props.points}</div>
+        <div className="current-word"> {this.props.squares} </div>
         <div className="board-row">
           {this.renderSquare('a')}
           {this.renderSquare('n')}
@@ -104,25 +98,100 @@ class Board extends React.Component {
         <div className="board-row">
           {this.renderSquare('e')}
           {this.renderSquare('l')}
-          {this.renderSquare(5)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(6)}
-          {this.renderSquare(7)}
-          {this.renderSquare(8)}
+          {this.renderSquare('x')}
         </div>
       </div>
     );
   }
 }
+
+
+
+
+
+
 class Game extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleClick = this.handleClick.bind(this);
+    this.onTimerChange = this.onTimerChange.bind(this);
+    this.checkIfWordIsCorrect = this.checkIfWordIsCorrect.bind(this);
+    this.showModal = this.showModal.bind(this);
+    this.hideModal = this.hideModal.bind(this);
+    this.playAgain = this.playAgain.bind(this);
+    this.state = {
+      test: 5, 
+      remainingTime: 8, 
+      squares: [],
+      words: ['angel', 'gel', 'age', 'leg', 'lag', 'gal', 'any'],
+      points: 0,
+      show: false
+    };
+  }
+
+  handleClick(param){
+    const squares = this.state.squares.slice();
+    squares.push(param)
+    this.setState({squares: squares}); 
+  }
+
+  checkIfWordIsCorrect(){
+    const index = this.state.words.indexOf(this.state.squares.join(''));
+    if(index > -1){
+      console.log('you win2')
+      const remainingWords = [...this.state.words.slice(0, index), ...this.state.words.slice(index+1)]
+      this.setState({squares: [], points: this.state.points + 1, words: remainingWords})
+    }
+  }
+
+  onTimerChange(){
+    console.log('time has changed', this.state.remainingTime)
+    this.setState({remainingTime: this.state.remainingTime - 1})
+    if(this.state.remainingTime == 0){
+      console.log('THE END')
+      this.showModal();
+    }
+  }
+
+  showModal(){
+    this.setState({show: true})
+  }
+
+  hideModal(){
+    this.setState({show: false})
+  }
+
+  playAgain(){
+    this.setState({
+      remainingTime: 8,  
+      squares: [],
+      words: ['angel', 'gel', 'age', 'leg', 'lag', 'gal', 'any'],
+      points: 0,
+      show: false
+    })
+  }
+
   render() {
+    const gameOn = this.state.remainingTime ? true : false;
+    let board, timer;
+
+    if(gameOn){
+      board = <Board handleClick={this.handleClick} checkIfWordIsCorrect={this.checkIfWordIsCorrect} squares={this.state.squares} words={this.state.words} points={this.state.points} />
+      timer = <Timer value="8" onTimerChange={this.onTimerChange} remainingTime={this.state.remainingTime}/>
+    } else {
+      board = <div> "Game ended" </div>
+      timer = <div> </div>
+    }
+
     return (
       
       <div className="game">
         <div className="game-board">
-          <Timer value="3" />
-          <Board />
+          {/*<Timer value="8" onTimerChange={this.onTimerChange} remainingTime={this.state.remainingTime}/>*/}
+          <div> {timer} </div>
+          <div> {board} </div>
+          {/*<Board handleClick={this.handleClick} checkIfWordIsCorrect={this.checkIfWordIsCorrect} squares={this.state.squares} words={this.state.words} points={this.state.points} />*/}
+          <Trigger points={this.state.points} showModal={this.showModal} hideModal={this.hideModal} show={this.state.show} playAgain={this.playAgain}/>
         </div>
         <div className="game-info">
           <div>{/* status */}</div>
@@ -142,3 +211,57 @@ export default Game;
   document.getElementById('root')
 );*/
 
+class Trigger extends React.Component {
+  constructor(props, context) {
+    super(props, context);
+
+    this.handleHide = this.handleHide.bind(this);
+    this.playAgain = this.playAgain.bind(this);
+
+    /*this.state = {
+      show: false
+    };*/
+  }
+
+  handleHide() {
+    //this.setState({ show: false });
+    this.props.hideModal();
+  }
+
+  playAgain(){
+    this.props.playAgain();
+  }
+  render() {
+    return (
+      <div className="modal-container" style={{ height: 500 }}>
+        <ReactBootstrap.Button
+          bsStyle="primary"
+          bsSize="large"
+          onClick={() => this.props.showModal()/*this.setState({ show: true })*/}
+        >
+          Launch contained modal
+        </ReactBootstrap.Button>
+
+        <ReactBootstrap.Modal
+          show={this.props.show}
+          onHide={this.handleHide}
+          container={this}
+          aria-labelledby="contained-modal-title"
+        >
+          <ReactBootstrap.Modal.Header closeButton>
+            <ReactBootstrap.Modal.Title id="contained-modal-title">
+              Player Points: {this.props.points}
+            </ReactBootstrap.Modal.Title>
+          </ReactBootstrap.Modal.Header>
+          <ReactBootstrap.Modal.Body>
+            body text
+          </ReactBootstrap.Modal.Body>
+          <ReactBootstrap.Modal.Footer>
+            <ReactBootstrap.Button onClick={this.playAgain}>Play Again</ReactBootstrap.Button>
+            <ReactBootstrap.Button onClick={this.handleHide}>Close</ReactBootstrap.Button>
+          </ReactBootstrap.Modal.Footer>
+        </ReactBootstrap.Modal>
+      </div>
+    );
+  }
+}
