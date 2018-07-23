@@ -65,7 +65,9 @@ class Game extends React.Component {
   }
 
   onTimerChange(){
-    this.setState({remainingTime: this.state.remainingTime - 1})
+    this.setState((prevState, props) => ({
+      remainingTime: prevState.remainingTime - 1
+    }));
 
     if(this.state.remainingTime == 0){
       console.log('THE END')
