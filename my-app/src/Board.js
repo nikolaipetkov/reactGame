@@ -6,6 +6,8 @@ class Board extends React.Component {
     super(props);
   }
 
+  
+
   handleClick(i) {
     this.props.handleClick(i)
   }
@@ -28,6 +30,9 @@ class Board extends React.Component {
   }
 
   render() {
+    if(!this.props.showBoard){
+      return null;
+    }
     return (
       <div>
         <div className="points">Points: {this.props.points}</div>

@@ -21,7 +21,7 @@ class Game extends React.Component {
     this.state = {
       remainingTime: 40, 
       letters: [],
-      words: ['angel', 'gel', 'age', 'leg', 'lag', 'gal', 'any', 'gale', 'lane'],
+      words: ['angel', 'gel', 'age', 'leg', 'lag', 'gal', 'any', 'gale', 'lane', 'all'],
       points: 0,
       show: false,
       players: [],
@@ -109,11 +109,11 @@ class Game extends React.Component {
     let board, timer;
 
     if(gameOn){
-      board = <Board setNickname={this.setNickname} clearCurrent={this.clearCurrent} handleClick={this.handleClick} checkIfWordIsCorrect={this.checkIfWordIsCorrect} letters={this.state.letters} words={this.state.words} points={this.state.points} />
-      timer = <Timer value="8" onTimerChange={this.onTimerChange} remainingTime={this.state.remainingTime}/>
+      board = <Board showBoard={true} setNickname={this.setNickname} clearCurrent={this.clearCurrent} handleClick={this.handleClick} checkIfWordIsCorrect={this.checkIfWordIsCorrect} letters={this.state.letters} words={this.state.words} points={this.state.points} />
+      timer = <Timer showTimer={true} onTimerChange={this.onTimerChange} remainingTime={this.state.remainingTime}/>
     } else {
-      board = <div> "Game ended" </div>
-      timer = <div> </div>
+      board = <Board showBoard={false} setNickname={this.setNickname} clearCurrent={this.clearCurrent} handleClick={this.handleClick} checkIfWordIsCorrect={this.checkIfWordIsCorrect} letters={this.state.letters} words={this.state.words} points={this.state.points} />
+      timer = <Timer showTimer={false} onTimerChange={this.onTimerChange} remainingTime={this.state.remainingTime}/>
     }
 
     return (
