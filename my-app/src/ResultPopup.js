@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import Leaderboard from './Leaderboard'
 

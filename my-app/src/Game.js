@@ -1,7 +1,5 @@
-import React, { Component } from 'react';
-import { Button, Modal } from 'react-bootstrap';
+import React from 'react';
 import './App.css';
-import Leaderboard from './Leaderboard';
 import Timer from './Timer';
 import ResultPopup from './ResultPopup';
 import Board from './Board';
@@ -18,10 +16,12 @@ class Game extends React.Component {
     this.playAgain = this.playAgain.bind(this);
     this.setNickname = this.setNickname.bind(this);
     this.clearCurrent = this.clearCurrent.bind(this);
+    this.correctWords = ['angel', 'gel', 'age', 'leg', 'lag', 'gal', 'any', 'gale', 'lane', 'all'];
+    this.gameTime = 40;
     this.state = {
-      remainingTime: 40, 
+      remainingTime: this.gameTime, 
       letters: [],
-      words: ['angel', 'gel', 'age', 'leg', 'lag', 'gal', 'any', 'gale', 'lane', 'all'],
+      words: this.correctWords,
       points: 0,
       show: false,
       players: [],
@@ -51,7 +51,11 @@ class Game extends React.Component {
     const index = this.state.words.indexOf(this.state.letters.join(''));
     if(index > -1){
       const remainingWords = [...this.state.words.slice(0, index), ...this.state.words.slice(index+1)]
-      this.setState({letters: [], points: this.state.points + 5, words: remainingWords})
+      this.setState((prevState, props) => ({
+        letters: [],
+        points: prevState.points + 5,
+        words: remainingWords
+      }));
     }
   }
 
@@ -69,7 +73,7 @@ class Game extends React.Component {
       remainingTime: prevState.remainingTime - 1
     }));
 
-    if(this.state.remainingTime == 0){
+    if(this.state.remainingTime === 0){
       console.log('THE END')
       this.getNickname()
       this.setNickname(this.currentPlayerNickname)
@@ -93,9 +97,9 @@ class Game extends React.Component {
 
   playAgain(){
     this.setState({
-      remainingTime: 40,  
+      remainingTime: this.gameTime,  
       letters: [],
-      words: ['angel', 'gel', 'age', 'leg', 'lag', 'gal', 'any', 'gale', 'lane'],
+      words: this.correctWords,
       points: 0,
       show: false,
       nickname: null
@@ -109,11 +113,11 @@ class Game extends React.Component {
     let board, timer;
 
     if(gameOn){
-      board = <Board showBoard={true} setNickname={this.setNickname} clearCurrent={this.clearCurrent} handleClick={this.handleClick} checkIfWordIsCorrect={this.checkIfWordIsCorrect} letters={this.state.letters} words={this.state.words} points={this.state.points} />
-      timer = <Timer showTimer={true} onTimerChange={this.onTimerChange} remainingTime={this.state.remainingTime}/>
+      board = <Board setNickname={this.setNickname} clearCurrent={this.clearCurrent} handleClick={this.handleClick} checkIfWordIsCorrect={this.checkIfWordIsCorrect} letters={this.state.letters} words={this.state.words} points={this.state.points} />
+      timer = <Timer onTimerChange={this.onTimerChange} remainingTime={this.state.remainingTime} />
     } else {
-      board = <Board showBoard={false} setNickname={this.setNickname} clearCurrent={this.clearCurrent} handleClick={this.handleClick} checkIfWordIsCorrect={this.checkIfWordIsCorrect} letters={this.state.letters} words={this.state.words} points={this.state.points} />
-      timer = <Timer showTimer={false} onTimerChange={this.onTimerChange} remainingTime={this.state.remainingTime}/>
+      board = <div> "Game ended" </div>
+      timer = <div> </div>
     }
 
     return (

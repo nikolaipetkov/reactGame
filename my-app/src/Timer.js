@@ -1,10 +1,6 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 class Timer extends React.Component {
-  constructor(props){
-    super(props);
-  }
-  
   componentDidMount(prevProps){
     this.timerID = setInterval(
       () => this.tick(),
@@ -13,9 +9,9 @@ class Timer extends React.Component {
   }
    
   componentDidUpdate(){
-    if(this.props.remainingTime == 0){
+    if(this.props.remainingTime === 0){
       clearInterval(this.timerID);
-    }
+    } 
   }
   
   componentWillUnmount() {
@@ -27,9 +23,6 @@ class Timer extends React.Component {
   }
   
   render(){
-    if(!this.props.showTimer)
-      return null;
-    
     return (
       <div className="timer">
         {this.props.remainingTime}

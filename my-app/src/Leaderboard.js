@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 function Leaderboard(props){
   let leaderboardItems = props.leaderboardItems.map((element) =>
