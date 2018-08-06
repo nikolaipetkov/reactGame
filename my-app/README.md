@@ -7,3 +7,9 @@ In order to start it ->
 
 1. npm install
 2. npm start
+
+
+
+
+
+Ignore this: just testing for proper git configs
