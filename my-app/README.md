@@ -13,3 +13,4 @@ In order to start it ->
 
 
 Ignore this: just testing for proper git configs from git bash 
+-infoleven acc commit
